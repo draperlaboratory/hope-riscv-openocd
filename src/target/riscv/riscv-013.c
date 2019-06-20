@@ -2875,8 +2875,25 @@ static int write_memory(struct target *target, target_addr_t address,
 		uint32_t size, uint32_t count, const uint8_t *buffer)
 {
 	RISCV013_INFO(info);
-	if (info->progbufsize >= 2 && !riscv_prefer_sba)
+
+	bool using_jtag_vpi = riscv_progbuf_no_blocks; // Indicates that OpenOCD is using JTAG VPI
+
+	// Modified program buffer write sequence. Preform block writes of size one only when
+	// using jtag_vpi.
+	if(using_jtag_vpi) {
+		if (info->progbufsize >= 2 && !riscv_prefer_sba) {
+			for (uint32_t i = 0; i < count; i = i+block_size) {
+				result = write_memory_progbuf(target, (address + size*i), size, block_size, (buffer + size*i));
+				if (result == ERROR_FAIL) {
+					return result;
+				}
+			}
+			return ERROR_OK;
+		}
+	} else {
 		return write_memory_progbuf(target, address, size, count, buffer);
+	}
+
 
 	if ((get_field(info->sbcs, DMI_SBCS_SBACCESS8) && size == 1) ||
 			(get_field(info->sbcs, DMI_SBCS_SBACCESS16) && size == 2) ||
@@ -2889,8 +2906,22 @@ static int write_memory(struct target *target, target_addr_t address,
 			return write_memory_bus_v1(target, address, size, count, buffer);
 	}
 
-	if (info->progbufsize >= 2)
+	// Modified program buffer write sequence. Preform block writes of size one only when
+	// using jtag_vpi.
+	if (using_jtag_vpi) {
+		if (info->progbufsize >= 2) {
+			for (uint32_t i = 0; i < count; i = i+block_size) {
+				result = write_memory_progbuf(target, (address + size*i), size, block_size, (buffer + size*i));
+				if (result == ERROR_FAIL) {
+					return result;
+				}
+			}
+			return ERROR_OK;
+		}
+	} else {
 		return write_memory_progbuf(target, address, size, count, buffer);
+	}
+
 
 	LOG_ERROR("Don't know how to write memory on this target.");
 	return ERROR_FAIL;
