@@ -2871,6 +2871,21 @@ error:
 	return result;
 }
 
+static int write_memory_progbuf_no_blocks(struct target *target, target_addr_t address,
+		uint32_t size, uint32_t count, const uint8_t *buffer) {
+
+	uint32_t batch_size = 1; // Use a batch size of 1 when programming without block writes
+	int result = ERROR_FAIL;
+
+	for (uint32_t i = 0; i < count; i = i+batch_size) {
+		result = write_memory_progbuf(target, (address + size*i), size, batch_size, (buffer + size*i));
+		if (result == ERROR_FAIL) {
+			return result;
+		}
+	}
+	return ERROR_OK;
+}
+
 static int write_memory(struct target *target, target_addr_t address,
 		uint32_t size, uint32_t count, const uint8_t *buffer)
 {
@@ -2880,19 +2895,13 @@ static int write_memory(struct target *target, target_addr_t address,
 
 	// Modified program buffer write sequence. Preform block writes of size one only when
 	// using jtag_vpi.
-	if(using_jtag_vpi) {
-		if (info->progbufsize >= 2 && !riscv_prefer_sba) {
-			for (uint32_t i = 0; i < count; i = i+block_size) {
-				result = write_memory_progbuf(target, (address + size*i), size, block_size, (buffer + size*i));
-				if (result == ERROR_FAIL) {
-					return result;
-				}
-			}
-			return ERROR_OK;
+	if (info->progbufsize >= 2 && !riscv_prefer_sba) {
+		if(using_jtag_vpi) {
+			return write_memory_progbuf_no_blocks(target, address, size, count, buffer);
+		} else {
+			return write_memory_progbuf(target, address, size, count, buffer);
 		}
-	} else {
-		return write_memory_progbuf(target, address, size, count, buffer);
-	}
+	} 
 
 
 	if ((get_field(info->sbcs, DMI_SBCS_SBACCESS8) && size == 1) ||
@@ -2908,19 +2917,13 @@ static int write_memory(struct target *target, target_addr_t address,
 
 	// Modified program buffer write sequence. Preform block writes of size one only when
 	// using jtag_vpi.
-	if (using_jtag_vpi) {
-		if (info->progbufsize >= 2) {
-			for (uint32_t i = 0; i < count; i = i+block_size) {
-				result = write_memory_progbuf(target, (address + size*i), size, block_size, (buffer + size*i));
-				if (result == ERROR_FAIL) {
-					return result;
-				}
-			}
-			return ERROR_OK;
+	if (info->progbufsize >= 2) {
+		if(using_jtag_vpi) {
+			return write_memory_progbuf_no_blocks(target, address, size, count, buffer);
+		} else {
+			return write_memory_progbuf(target, address, size, count, buffer);
 		}
-	} else {
-		return write_memory_progbuf(target, address, size, count, buffer);
-	}
+	} 
 
 
 	LOG_ERROR("Don't know how to write memory on this target.");
