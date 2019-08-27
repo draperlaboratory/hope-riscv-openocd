@@ -2670,6 +2670,12 @@ static int write_memory_bus_v1(struct target *target, target_addr_t address,
 
 		next_address = sb_read_address(target);
 
+		if (next_address < address) {
+			/* This should never happen, probably buggy hardware. */
+			LOG_DEBUG("unexpected system bus address 0x%016" PRIx64, next_address);
+			return ERROR_FAIL;
+		}
+
 		if (get_field(sbcs, DMI_SBCS_SBBUSYERROR)) {
 			/* We wrote while the target was busy. Slow down and try again. */
 			dmi_write(target, DMI_SBCS, DMI_SBCS_SBBUSYERROR);
