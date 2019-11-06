@@ -1,0 +1,14 @@
+.PHONY: all
+.PHONY: install
+.PHONY: clean
+
+ISP_PREFIX ?= $(HOME)/.local/isp/
+
+all:
+	./bootstrap; ./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi; $(MAKE)
+
+install:
+	$(MAKE) install
+
+clean:
+	$(MAKE) clean
