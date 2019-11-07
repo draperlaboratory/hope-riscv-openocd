@@ -4,8 +4,12 @@
 
 ISP_PREFIX ?= $(HOME)/.local/isp/
 
-all:
-	./bootstrap; ./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi; $(MAKE)
+all: Makefile
+	$(MAKE)
+
+Makefile:
+	./bootstrap
+	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
 
 install:
 	$(MAKE) install
