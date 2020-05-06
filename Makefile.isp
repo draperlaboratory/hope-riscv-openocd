@@ -14,5 +14,5 @@ Makefile:
 install:
 	$(MAKE) install
 
-clean:
+clean: Makefile
 	$(MAKE) clean
