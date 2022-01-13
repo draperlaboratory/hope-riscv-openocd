@@ -106,7 +106,7 @@ typedef struct _mg_io_type_drv_info {
 	mg_io_uint16 security_stas;
 	mg_io_uint8 vendor_uniq_bytes[62];
 	mg_io_uint16 cfa_pwr_mode;
-	mg_io_uint8 reserved7[186];
+	mg_io_uint8 reserved7[190];
 
 	mg_io_uint16 scts_per_secure_data_unit;
 	mg_io_uint16 integrity_word;

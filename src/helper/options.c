@@ -34,9 +34,18 @@
 #if IS_DARWIN
 #include <libproc.h>
 #endif
-#ifdef HAVE_SYS_SYSCTL_H
-#include <sys/sysctl.h>
+// #ifdef HAVE_SYS_SYSCTL_H
+// #include <sys/sysctl.h>
+// #endif
+
+#ifndef CTL_KERN
+#define CTL_KERN 1
 #endif
+#ifndef KERN_RTSIGMAX
+#define KERN_RTSIGMAX 33
+#endif
+
+
 #if IS_WIN32 && !IS_CYGWIN
 #include <windows.h>
 #endif
@@ -100,8 +109,9 @@ static char *find_exe_path(void)
 			break;
 		int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
 		size_t size = PATH_MAX;
-
-		if (sysctl(mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
+		
+		if (syscall(RR__sysctl, mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
+		//if (sysctl(mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
 			break;
 
 #ifdef HAVE_REALPATH
