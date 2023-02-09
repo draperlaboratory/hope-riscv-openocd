@@ -103,9 +103,8 @@ static char *find_exe_path(void)
 			break;
 		int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
 		size_t size = PATH_MAX;
-		
-		if (syscall(RR__sysctl, mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
-		//if (sysctl(mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
+
+		if (sysctl(mib, (u_int)ARRAY_SIZE(mib), path, &size, NULL, 0) != 0)
 			break;
 
 #ifdef HAVE_REALPATH

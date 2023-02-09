@@ -3130,21 +3130,6 @@ COMMAND_HANDLER(riscv_resume_order)
 	return ERROR_OK;
 }
 
-// TODO: Remove this command once block memory writes to progbuf  fixed.
-// Disable block memory writes when using the program buffer
-COMMAND_HANDLER(set_progbuf_no_blocks)
-{
-	LOG_WARNING("Disabling block memory writes when using the program buffer");
-	LOG_WARNING("Memory operations may be slow");
-
-	if (CMD_ARGC != 1) {
-		LOG_ERROR("Command takes exactly 1 parameter");
-		return ERROR_COMMAND_SYNTAX_ERROR;
-	}
-	COMMAND_PARSE_ON_OFF(CMD_ARGV[0], riscv_progbuf_no_blocks);
-	return ERROR_OK;
-}
-
 COMMAND_HANDLER(riscv_use_bscan_tunnel)
 {
 	int irwidth = 0;
@@ -3671,14 +3656,6 @@ static const struct command_registration riscv_exec_command_handlers[] = {
 		.help = "When on, memory accesses are performed on physical or virtual "
 				"memory depending on the current system configuration. "
 				"When off (default), all memory accessses are performed on physical memory."
-	},
-	{
-		.name = "set_progbuf_no_blocks",
-		.handler = set_progbuf_no_blocks,
-		.mode = COMMAND_ANY,
-		.usage = "riscv set_progbuf_no_blocks on|off",
-		.help = "When on, disable block memory writes when using the program buffer. "
-			"When off, enable block memory writes (default behavior)."
 	},
 	{
 		.name = "expose_csrs",
