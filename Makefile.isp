@@ -3,16 +3,17 @@
 .PHONY: clean
 
 ISP_PREFIX ?= $(HOME)/.local/isp/
+PWD = $(shell pwd)
 
 all: Makefile
-	$(MAKE)
+	$(MAKE) -C $(PWD)/openocd
 
 Makefile:
-	./bootstrap
-	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi --enable-doxygen-pdf
+	cd  $(PWD)/openocd && ./bootstrap
+	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi -enable-doxygen-pdf
 
 install:
-	$(MAKE) install
+	$(MAKE) -C $(PWD)/install
 
 clean: Makefile
-	$(MAKE) clean
+	$(MAKE) -C ($(PWD)/openocd clean
