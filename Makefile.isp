@@ -9,7 +9,7 @@ all: Makefile
 
 Makefile:
 	./bootstrap
-	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
+	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi --enable-doxygen-pdf
 
 install:
 	$(MAKE) install
