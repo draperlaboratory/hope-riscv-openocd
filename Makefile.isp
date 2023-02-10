@@ -8,12 +8,20 @@ PWD = $(shell pwd)
 all: Makefile
 	$(MAKE) -C $(PWD)/openocd
 
+## the src/jtag/drivers/libjaylink repo does not seem to be cloning; thus, an alternative is to clone only the needed submodules
+## one can do that by enabling the comented out lines in the Mafile target; If the above repo would clone, one would also have
+## remove the nosubmodule argument to bootstrap
+
 Makefile:
-	cd  $(PWD)/openocd && ./bootstrap
-	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi -enable-doxygen-pdf
+	## git -C $(PWD)/openocd submodule update --force --remote jimtcl
+	## git -C $(PWD)/openocd submodule update --force --remote tools/git2cl
+	cd $(PWD)/openocd ./bootstrap nosubmodule
+	# ensure that the jimtcl has a configure.ac file, or else the configure will fail with an erronous message
+	[ ! -f $(PWD)/openocd/jimtcl/configure.ac ] && (cd $(PWD)/openocd && autoscan jimtcl && mv jimtcl/configure.scan  jimtcl/configure.ac)
+	cd $(PWD)/openocd && ./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi --enable-doxygen-pdf
 
 install:
-	$(MAKE) -C $(PWD)/install
+	$(MAKE) -C $(PWD)/openocd install
 
 clean: Makefile
 	$(MAKE) -C ($(PWD)/openocd clean
