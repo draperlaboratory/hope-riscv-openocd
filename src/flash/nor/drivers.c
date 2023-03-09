@@ -44,6 +44,7 @@ extern const struct flash_driver faux_flash;
 extern const struct flash_driver fm3_flash;
 extern const struct flash_driver fm4_flash;
 extern const struct flash_driver fespi_flash;
+extern const struct flash_driver gd32vf103_flash;
 extern const struct flash_driver jtagspi_flash;
 extern const struct flash_driver kinetis_flash;
 extern const struct flash_driver kinetis_ke_flash;
@@ -56,6 +57,7 @@ extern const struct flash_driver mdr_flash;
 extern const struct flash_driver mrvlqspi_flash;
 extern const struct flash_driver msp432_flash;
 extern const struct flash_driver niietcm4_flash;
+extern const struct flash_driver npcx_flash;
 extern const struct flash_driver nrf5_flash;
 extern const struct flash_driver nrf51_flash;
 extern const struct flash_driver numicro_flash;
@@ -66,6 +68,9 @@ extern const struct flash_driver psoc5lp_flash;
 extern const struct flash_driver psoc5lp_eeprom_flash;
 extern const struct flash_driver psoc5lp_nvl_flash;
 extern const struct flash_driver psoc6_flash;
+extern const struct flash_driver renesas_rpchf_flash;
+extern const struct flash_driver rp2040_flash;
+extern const struct flash_driver sh_qspi_flash;
 extern const struct flash_driver sim3x_flash;
 extern const struct flash_driver stellaris_flash;
 extern const struct flash_driver stm32f1x_flash;
@@ -73,10 +78,12 @@ extern const struct flash_driver stm32f2x_flash;
 extern const struct flash_driver stm32lx_flash;
 extern const struct flash_driver stm32l4x_flash;
 extern const struct flash_driver stm32h7x_flash;
+extern const struct flash_driver stmqspi_flash;
 extern const struct flash_driver stmsmi_flash;
 extern const struct flash_driver str7x_flash;
 extern const struct flash_driver str9x_flash;
 extern const struct flash_driver str9xpec_flash;
+extern const struct flash_driver swm050_flash;
 extern const struct flash_driver tms470_flash;
 extern const struct flash_driver virtual_flash;
 extern const struct flash_driver w600_flash;
@@ -113,6 +120,7 @@ static const struct flash_driver * const flash_drivers[] = {
 	&fm3_flash,
 	&fm4_flash,
 	&fespi_flash,
+	&gd32vf103_flash,
 	&jtagspi_flash,
 	&kinetis_flash,
 	&kinetis_ke_flash,
@@ -125,6 +133,7 @@ static const struct flash_driver * const flash_drivers[] = {
 	&mrvlqspi_flash,
 	&msp432_flash,
 	&niietcm4_flash,
+	&npcx_flash,
 	&nrf5_flash,
 	&nrf51_flash,
 	&numicro_flash,
@@ -135,6 +144,9 @@ static const struct flash_driver * const flash_drivers[] = {
 	&psoc5lp_eeprom_flash,
 	&psoc5lp_nvl_flash,
 	&psoc6_flash,
+	&renesas_rpchf_flash,
+	&rp2040_flash,
+	&sh_qspi_flash,
 	&sim3x_flash,
 	&stellaris_flash,
 	&stm32f1x_flash,
@@ -143,9 +155,11 @@ static const struct flash_driver * const flash_drivers[] = {
 	&stm32l4x_flash,
 	&stm32h7x_flash,
 	&stmsmi_flash,
+	&stmqspi_flash,
 	&str7x_flash,
 	&str9x_flash,
 	&str9xpec_flash,
+	&swm050_flash,
 	&tms470_flash,
 	&virtual_flash,
 	&xcf_flash,
