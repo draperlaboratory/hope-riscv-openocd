@@ -3658,14 +3658,6 @@ static const struct command_registration riscv_exec_command_handlers[] = {
 				"When off (default), all memory accessses are performed on physical memory."
 	},
 	{
-		.name = "set_progbuf_no_blocks",
-		.handler = set_progbuf_no_blocks,
-		.mode = COMMAND_ANY,
-		.usage = "riscv set_progbuf_no_blocks on|off",
-		.help = "When on, disable block memory writes when using the program buffer. "
-			"When off, enable block memory writes (default behavior)."
-	},
-	{
 		.name = "expose_csrs",
 		.handler = riscv_set_expose_csrs,
 		.mode = COMMAND_CONFIG,
