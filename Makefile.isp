@@ -3,16 +3,19 @@
 .PHONY: clean
 
 ISP_PREFIX ?= $(HOME)/.local/isp/
+PWD = $(shell pwd)
 
 all: Makefile
-	$(MAKE)
+	$(MAKE) -C $(PWD)/openocd
 
 Makefile:
-	./bootstrap
-	./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
+	# ensure that the jimtcl has a configure.ac file, or else the configure will fail with an erronous message
+	# [ ! -f $(PWD)/openocd/jimtcl/configure.ac ] && (cd $(PWD)/openocd && autoscan jimtcl && mv jimtcl/configure.scan  jimtcl/configure.ac) || echo "Found configure.ac in jimtcl repo!"
+	cd $(PWD)/openocd && ./bootstrap
+	cd $(PWD)/openocd && ./configure --prefix=$(ISP_PREFIX) --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi --enable-doxygen-pdf
 
-install:
-	$(MAKE) install
+install: Makefile
+	$(MAKE) -C $(PWD)/openocd install
 
 clean: Makefile
-	$(MAKE) clean
+	$(MAKE) -C $(PWD)/openocd clean
